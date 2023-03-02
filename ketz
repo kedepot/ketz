@@ -25,7 +25,7 @@ fp_format() {
 }
 
 fp_sub() {
-    fp_format $(echo "$1 $2 $3" | awk '{printf "%.1f \n", $1-$2}')
+    fp_format $(echo "$1 $2" | awk '{printf "%.1f \n", $1-$2}')
 }
 
 U="Coordinated Universal Time"
