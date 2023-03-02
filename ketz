@@ -1,0 +1,231 @@
+#!/bin/sh
+
+# KETZ v1.0 - Kjell Emanuelsson 2023 - Time Zones - shell script exercise
+
+LOW="\033[38;5;67m"
+BLUE="\033[38;5;111m"
+GREEN="\033[38;5;115m"
+date_f="%A %B %-d"
+time_f="%R %Z"
+
+columns="$GREEN%-14s $LOW%-13s %-18s $GREEN%-12s $BLUE%-5s\n"
+localcol="$LOW%-27s %-0s %-18s $BLUE%-14s\n"
+extracol="$LOW%-27s %-0s %-18s %-14s\n"
+
+fp_format() {
+    if awk "BEGIN {exit !($1 == 0)}"
+    then
+        printf "LOCAL"
+    elif awk "BEGIN {exit !($1 > 0)}"
+    then
+        printf "+%s"$1 | sed 's/\.0$//'
+    else
+        printf "%s"$1 | sed 's/\.0$//'
+    fi
+}
+
+fp_sub() {
+    fp_format $(echo "$1 $2 $3" | awk '{printf "%.1f \n", $1-$2}')
+}
+
+U="Coordinated Universal Time"
+U_DATE=$(LC_TIME="en_GB.UTF-8" TZ="Universal" date +"$date_f")
+U_TIME=$(LC_TIME="en_GB.UTF-8" TZ="Universal" date +"$time_f")
+
+L="LOCAL TIME"
+L_DATE=$(LC_TIME="en_US.UTF-8" date +"$date_f")
+L_TIME=$(LC_TIME="en_US.UTF-8" date +"$time_f")
+LTZ=$(timedatectl | grep "Time zone" | sed 's/\s*Time zone: //;' | sed 's/(.*//')
+LTZ=${LTZ:0:28}
+# Local Offset (all TZ's nrs are relative to local)
+LO=$(date +"%-:::z")
+
+R19="Pago-Pago Am.Samoa"
+R19_DATE=$(LC_TIME="en_US.UTF-8" TZ="Pacific/Pago_Pago" date +"$date_f")
+R19_TIME=$(LC_TIME="en_US.UTF-8" TZ="Pacific/Pago_Pago" date +"$time_f")
+R19_TZ=$(fp_sub -11 $LO)
+
+R20="Papeete Fr.Polynesia"
+R20_DATE=$(LC_TIME="fr_PF.UTF-8" TZ="Pacific/Pago_Pago" date +"$date_f")
+R20_TIME=$(LC_TIME="fr_PF.UTF-8" TZ="Pacific/Pago_Pago" date +"$time_f")
+R20_TZ=$(fp_sub -10 $LO)
+
+R21="Anchorage USA"
+R21_DATE=$(LC_TIME="en_US.UTF-8" TZ="America/Anchorage" date +"$date_f")
+R21_TIME=$(LC_TIME="en_US.UTF-8" TZ="America/Anchorage" date +"$time_f")
+R21_TZ=$(fp_sub -9 $LO)
+
+R22="Los-Angeles USA"
+R22_DATE=$(LC_TIME="en_US.UTF-8" TZ="America/Los_Angeles" date +"$date_f")
+R22_TIME=$(LC_TIME="en_US.UTF-8" TZ="America/Los_Angeles" date +"$time_f")
+R22_TZ=$(fp_sub -8 $LO)
+
+R23="Edmonton Canada"
+R23_DATE=$(LC_TIME="en_CA.UTF-8" TZ="America/Edmonton" date +"$date_f")
+R23_TIME=$(LC_TIME="en_CA.UTF-8" TZ="America/Edmonton" date +"$time_f")
+R23_TZ=$(fp_sub -7 $LO)
+
+R24="Mexico-City Mexico"
+R24_DATE=$(LC_TIME="es_MX.UTF-8" TZ="America/Mexico_City" date +"$date_f")
+R24_TIME=$(LC_TIME="es_MX.UTF-8" TZ="America/Mexico_City" date +"$time_f")
+R24_TZ=$(fp_sub -6 $LO)
+
+R25="New-York USA"
+R25_DATE=$(LC_TIME="en_US.UTF-8" TZ="America/New_York" date +"$date_f")
+R25_TIME=$(LC_TIME="en_US.UTF-8" TZ="America/New_York" date +"$time_f")
+R25_TZ=$(fp_sub -5 $LO)
+
+R26="Caracas Venezuela"
+R26_DATE=$(LC_TIME="es_VE.UTF-8" TZ="America/Caracas" date +"$date_f")
+R26_TIME=$(LC_TIME="es_VE.UTF-8" TZ="America/Caracas" date +"$time_f")
+R26_TZ=$(fp_sub -4 $LO)
+
+R2N="St.John's Canada"
+R2N_DATE=$(LC_TIME="en_CA.UTF-8" TZ="America/St_Johns" date +"$date_f")
+R2N_TIME=$(LC_TIME="en_CA.UTF-8" TZ="America/St_Johns" date +"$time_f")
+R2N_TZ=$(fp_sub -3.5 $LO)
+
+R27="Brasilia Brazil"
+R27_DATE=$(LC_TIME="pt_BR.UTF-8" TZ="Brazil/East" date +"$date_f")
+R27_TIME=$(LC_TIME="pt_BR.UTF-8" TZ="Brazil/East" date +"$time_f")
+R27_TZ=$(fp_sub -3 $LO)
+
+R28="South-Georgia UK"
+R28_DATE=$(LC_TIME="en_UK.UTF-8" TZ="Atlantic/South_Georgia" date +"$date_f")
+R28_TIME=$(LC_TIME="en_UK.UTF-8" TZ="Atlantic/South_Georgia" date +"$time_f")
+R28_TZ=$(fp_sub -2 $LO)
+
+R29="Praia Cape-Verde"
+R29_DATE=$(LC_TIME="pt_CV.UTF-8" TZ="Atlantic/Cape_Verde" date +"$date_f")
+R29_TIME=$(LC_TIME="pt_CV.UTF-8" TZ="Atlantic/Cape_Verde" date +"$time_f")
+R29_TZ=$(fp_sub -1 $LO)
+
+R01="Reykjavik Iceland"
+R01_DATE=$(LC_TIME="is_IS.UTF-8" TZ="Iceland" date +"$date_f")
+R01_TIME=$(LC_TIME="is_IS.UTF-8" TZ="Iceland" date +"$time_f")
+R01_TZ=$(fp_sub 0 $LO)
+
+R02="Yaounde Cameroon"
+R02_DATE=$(LC_TIME="fr_CM.UTF-8" TZ="Africa/Douala" date +"$date_f")
+R02_TIME=$(LC_TIME="fr_CM.UTF-8" TZ="Africa/Douala" date +"$time_f")
+R02_TZ=$(fp_sub 1 $LO)
+
+R03="Kyiv Ukraine"
+R03_DATE=$(LC_TIME="uk_UA.UTF-8" TZ="Europe/Kyiv" date +"$date_f")
+R03_TIME=$(LC_TIME="uk_UA.UTF-8" TZ="Europe/Kyiv" date +"$time_f")
+R03_TZ=$(fp_sub 2 $LO)
+
+R04="Antananarivo Madagasgar"
+R04_DATE=$(LC_TIME="en_MG.UTF-8" TZ="Indian/Antananarivo" date +"$date_f")
+R04_TIME=$(LC_TIME="en_MG.UTF-8" TZ="Indian/Antananarivo" date +"$time_f")
+R04_TZ=$(fp_sub 3 $LO)
+
+R05="Tehran Iran"
+R05_DATE=$(LC_TIME="fa_IR.UTF-8" TZ="Iran" date +"$date_f")
+R05_TIME=$(LC_TIME="fa_IR.UTF-8" TZ="Iran" date +"$time_f")
+R05_TZ=$(fp_sub 3.5 $LO)
+
+R06="Dubai UAE"
+R06_DATE=$(LC_TIME="ar_AE.UTF-8" TZ="Asia/Dubai" date +"$date_f")
+R06_TIME=$(LC_TIME="ar_AE.UTF-8" TZ="Asia/Dubai" date +"$time_f")
+R06_TZ=$(fp_sub 4 $LO)
+
+R07="Karachi Pakistan"
+R07_DATE=$(LC_TIME="ur_PK.UTF-8" TZ="Asia/Karachi" date +"$date_f")
+R07_TIME=$(LC_TIME="ur_PK.UTF-8" TZ="Asia/Karachi" date +"$time_f")
+R07_TZ=$(fp_sub 5 $LO)
+
+R08="New-Delhi India"
+R08_DATE=$(LC_TIME="en_IN.UTF-8" TZ="Asia/Kolkata" date +"$date_f")
+R08_TIME=$(LC_TIME="en_IN.UTF-8" TZ="Asia/Kolkata" date +"$time_f")
+R08_TZ=$(fp_sub 5.5 $LO)
+
+R09="Astana Kazakhstan"
+R09_DATE=$(LC_TIME="en_IN.UTF-8" TZ="Asia/Kolkata" date +"$date_f")
+R09_TIME=$(LC_TIME="en_IN.UTF-8" TZ="Asia/Kolkata" date +"$time_f")
+R09_TZ=$(fp_sub 6 $LO)
+
+R10="Yangon Burma"
+R10_DATE=$(LC_TIME="my_MM.UTF-8" TZ="Asia/Yangon" date +"$date_f")
+R10_TIME=$(LC_TIME="my_MM.UTF-8" TZ="Asia/Yangon" date +"$time_f")
+R10_TZ=$(fp_sub 6.5 $LO)
+
+R11="Jakarta Indonesia"
+R11_DATE=$(LC_TIME="id_ID.UTF-8" TZ="Asia/Jakarta" date +"$date_f")
+R11_TIME=$(LC_TIME="id_ID.UTF-8" TZ="Asia/Jakarta" date +"$time_f")
+R11_TZ=$(fp_sub 7 $LO)
+
+R12="Taipei Taiwan"
+R12_DATE=$(LC_TIME="zh_TW.UTF-8" TZ="Asia/Taipei" date +"$date_f")
+R12_TIME=$(LC_TIME="zh_TW.UTF-8" TZ="Asia/Taipei" date +"$time_f")
+R12_TZ=$(fp_sub 8 $LO)
+
+R13="Tokyo Japan"
+R13_DATE=$(LC_TIME="ja_JP.UTF-8" TZ="Japan" date +"$date_f")
+R13_TIME=$(LC_TIME="ja_JP.UTF-8" TZ="Japan" date +"$time_f")
+R13_TZ=$(fp_sub 9 $LO)
+
+R14="Canberra Australia"
+R14_DATE=$(LC_TIME="en_AU.UTF-8" TZ="Australia/Canberra" date +"$date_f")
+R14_TIME=$(LC_TIME="en_AU.UTF-8" TZ="Australia/Canberra" date +"$time_f")
+R14_TZ=$(fp_sub 10 $LO)
+
+R15="Magadan Russia"
+R15_DATE=$(LC_TIME="ru_RU.UTF-8" TZ="Asia/Magadan" date +"$date_f")
+R15_TIME=$(LC_TIME="ru_RU.UTF-8" TZ="Asia/Magadan" date +"$time_f")
+R15_TZ=$(fp_sub 11 $LO)
+
+R16="Auckland New-Zealand"
+R16_DATE=$(LC_TIME="en_NZ.UTF-8" TZ="Pacific/Auckland" date +"$date_f")
+R16_TIME=$(LC_TIME="en_NZ.UTF-8" TZ="Pacific/Auckland" date +"$time_f")
+R16_TZ=$(fp_sub 12 $LO)
+
+R17="Nuku'alofa Tonga"
+R17_DATE=$(LC_TIME="en_TO.UTF-8" TZ="Pacific/Tongatapu" date +"$date_f")
+R17_TIME=$(LC_TIME="en_TO.UTF-8" TZ="Pacific/Tongatapu" date +"$time_f")
+R17_TZ=$(fp_sub 13 $LO)
+
+R18="Line-Islands Kiribati"
+R18_DATE=$(LC_TIME="en_KI.UTF-8" TZ="Pacific/Kiritimati" date +"$date_f")
+R18_TIME=$(LC_TIME="en_KI.UTF-8" TZ="Pacific/Kiritimati" date +"$time_f")
+R18_TZ=$(fp_sub 14 $LO)
+
+echo
+echo -e "$BLUE$L"
+printf "$localcol" "$LTZ" "" "$L_DATE" "$L_TIME" "$L_PTZ"
+printf "$columns" $R19 "$R19_DATE" "$R19_TIME" "$R19_TZ"
+printf "$columns" $R20 "$R20_DATE" "$R20_TIME" "$R20_TZ"
+printf "$columns" $R21 "$R21_DATE" "$R21_TIME" "$R21_TZ"
+printf "$columns" $R22 "$R22_DATE" "$R22_TIME" "$R22_TZ"
+printf "$columns" $R23 "$R23_DATE" "$R23_TIME" "$R23_TZ"
+printf "$columns" $R24 "$R24_DATE" "$R24_TIME" "$R24_TZ"
+printf "$columns" $R25 "$R25_DATE" "$R25_TIME" "$R25_TZ"
+printf "$columns" $R26 "$R26_DATE" "$R26_TIME" "$R26_TZ"
+printf "$columns" $R2N "$R2N_DATE" "$R2N_TIME" "$R2N_TZ"
+printf "$columns" $R27 "$R27_DATE" "$R27_TIME" "$R27_TZ"
+printf "$columns" $R28 "$R28_DATE" "$R28_TIME" "$R28_TZ"
+printf "$columns" $R29 "$R29_DATE" "$R29_TIME" "$R29_TZ"
+printf "$columns" $R01 "$R01_DATE" "$R01_TIME" "$R01_TZ"
+printf "$columns" $R02 "$R02_DATE" "$R02_TIME" "$R02_TZ"
+printf "$columns" $R03 "$R03_DATE" "$R03_TIME" "$R03_TZ"
+printf "$columns" $R04 "$R04_DATE" "$R04_TIME" "$R04_TZ"
+printf "$columns" $R05 "$R05_DATE" "$R05_TIME" "$R05_TZ"
+printf "$columns" $R06 "$R06_DATE" "$R06_TIME" "$R06_TZ"
+printf "$columns" $R07 "$R07_DATE" "$R07_TIME" "$R07_TZ"
+printf "$columns" $R08 "$R08_DATE" "$R08_TIME" "$R08_TZ"
+printf "$columns" $R09 "$R09_DATE" "$R09_TIME" "$R09_TZ"
+printf "$columns" $R10 "$R10_DATE" "$R10_TIME" "$R10_TZ"
+printf "$columns" $R11 "$R11_DATE" "$R11_TIME" "$R11_TZ"
+printf "$columns" $R12 "$R12_DATE" "$R12_TIME" "$R12_TZ"
+printf "$columns" $R13 "$R13_DATE" "$R13_TIME" "$R13_TZ"
+printf "$columns" $R14 "$R14_DATE" "$R14_TIME" "$R14_TZ"
+printf "$columns" $R15 "$R15_DATE" "$R15_TIME" "$R15_TZ"
+printf "$columns" $R16 "$R16_DATE" "$R16_TIME" "$R16_TZ"
+printf "$columns" $R17 "$R17_DATE" "$R17_TIME" "$R17_TZ"
+printf "$columns" $R18 "$R18_DATE" "$R18_TIME" "$R18_TZ"
+
+echo
+printf "$extracol" "$U" "" "$U_DATE" "$U_TIME"
+printf "$extracol" "Unix Time" "" "(Epoch)" "$(date +"%s")"
+echo
+
