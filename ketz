@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# KETZ v1.0 - Kjell Emanuelsson 2023 - Time Zones - shell script exercise
+# KETZ v1.01 - Kjell Emanuelsson 2023 - Time Zones - shell script exercise
 
 LOW="\033[38;5;67m"
 BLUE="\033[38;5;111m"
