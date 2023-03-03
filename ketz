@@ -1,16 +1,22 @@
 #!/bin/sh
 
-# KETZ v1.01 - Kjell Emanuelsson 2023 - Time Zones - shell script exercise
+# KETZ v1.02 - Kjell Emanuelsson 2023 - Time Zones - shell script exercise
 
-LOW="\033[38;5;67m"
+# BG1="\e[49m"
+# BG2="\e[30;48;5;0m"
+LOW="\033[38;5;110m"
 BLUE="\033[38;5;111m"
 GREEN="\033[38;5;115m"
+INVGREEN="\033[38;5;66m"
+INVLOW="\033[38;5;67m"
+INVBLUE="\033[38;5;67m"
 date_f="%A %B %-d"
 time_f="%R %Z"
 
-columns="$GREEN%-14s $LOW%-13s %-18s $GREEN%-12s $BLUE%-5s\n"
-localcol="$LOW%-27s %-0s %-18s $BLUE%-14s\n"
-extracol="$LOW%-27s %-0s %-18s %-14s\n"
+column1="$GREEN%-14s $LOW%-13s %-18s $GREEN%-12s $BLUE%-6s\n"
+column2="$INVGREEN%-14s $INVLOW%-13s %-18s $INVGREEN%-12s $INVBLUE%-6s\n"
+localcol="\e[0m$INVLOW%-27s %-0s %-18s $BLUE%-14s\n"
+extracol="\e[0m$INVLOW%-27s %-0s %-18s %-14s\n"
 
 fp_format() {
     if awk "BEGIN {exit !($1 == 0)}"
@@ -32,12 +38,11 @@ U="Coordinated Universal Time"
 U_DATE=$(LC_TIME="en_GB.UTF-8" TZ="Universal" date +"$date_f")
 U_TIME=$(LC_TIME="en_GB.UTF-8" TZ="Universal" date +"$time_f")
 
-L="LOCAL TIME"
+L="\e[1mLOCAL TIME\e[0m"
 L_DATE=$(LC_TIME="en_US.UTF-8" date +"$date_f")
 L_TIME=$(LC_TIME="en_US.UTF-8" date +"$time_f")
 LTZ=$(timedatectl | grep "Time zone" | sed 's/\s*Time zone: //;' | sed 's/(.*//')
 LTZ=${LTZ:0:28}
-# Local Offset (all TZ's nrs are relative to local)
 LO=$(date +"%-:::z")
 
 R19="Pago-Pago Am.Samoa"
@@ -193,36 +198,36 @@ R18_TZ=$(fp_sub 14 $LO)
 echo
 echo -e "$BLUE$L"
 printf "$localcol" "$LTZ" "" "$L_DATE" "$L_TIME" "$L_PTZ"
-printf "$columns" $R19 "$R19_DATE" "$R19_TIME" "$R19_TZ"
-printf "$columns" $R20 "$R20_DATE" "$R20_TIME" "$R20_TZ"
-printf "$columns" $R21 "$R21_DATE" "$R21_TIME" "$R21_TZ"
-printf "$columns" $R22 "$R22_DATE" "$R22_TIME" "$R22_TZ"
-printf "$columns" $R23 "$R23_DATE" "$R23_TIME" "$R23_TZ"
-printf "$columns" $R24 "$R24_DATE" "$R24_TIME" "$R24_TZ"
-printf "$columns" $R25 "$R25_DATE" "$R25_TIME" "$R25_TZ"
-printf "$columns" $R26 "$R26_DATE" "$R26_TIME" "$R26_TZ"
-printf "$columns" $R2N "$R2N_DATE" "$R2N_TIME" "$R2N_TZ"
-printf "$columns" $R27 "$R27_DATE" "$R27_TIME" "$R27_TZ"
-printf "$columns" $R28 "$R28_DATE" "$R28_TIME" "$R28_TZ"
-printf "$columns" $R29 "$R29_DATE" "$R29_TIME" "$R29_TZ"
-printf "$columns" $R01 "$R01_DATE" "$R01_TIME" "$R01_TZ"
-printf "$columns" $R02 "$R02_DATE" "$R02_TIME" "$R02_TZ"
-printf "$columns" $R03 "$R03_DATE" "$R03_TIME" "$R03_TZ"
-printf "$columns" $R04 "$R04_DATE" "$R04_TIME" "$R04_TZ"
-printf "$columns" $R05 "$R05_DATE" "$R05_TIME" "$R05_TZ"
-printf "$columns" $R06 "$R06_DATE" "$R06_TIME" "$R06_TZ"
-printf "$columns" $R07 "$R07_DATE" "$R07_TIME" "$R07_TZ"
-printf "$columns" $R08 "$R08_DATE" "$R08_TIME" "$R08_TZ"
-printf "$columns" $R09 "$R09_DATE" "$R09_TIME" "$R09_TZ"
-printf "$columns" $R10 "$R10_DATE" "$R10_TIME" "$R10_TZ"
-printf "$columns" $R11 "$R11_DATE" "$R11_TIME" "$R11_TZ"
-printf "$columns" $R12 "$R12_DATE" "$R12_TIME" "$R12_TZ"
-printf "$columns" $R13 "$R13_DATE" "$R13_TIME" "$R13_TZ"
-printf "$columns" $R14 "$R14_DATE" "$R14_TIME" "$R14_TZ"
-printf "$columns" $R15 "$R15_DATE" "$R15_TIME" "$R15_TZ"
-printf "$columns" $R16 "$R16_DATE" "$R16_TIME" "$R16_TZ"
-printf "$columns" $R17 "$R17_DATE" "$R17_TIME" "$R17_TZ"
-printf "$columns" $R18 "$R18_DATE" "$R18_TIME" "$R18_TZ"
+printf "$column1" $R19 "$R19_DATE" "$R19_TIME" "$R19_TZ"
+printf "$column2" $R20 "$R20_DATE" "$R20_TIME" "$R20_TZ"
+printf "$column1" $R21 "$R21_DATE" "$R21_TIME" "$R21_TZ"
+printf "$column2" $R22 "$R22_DATE" "$R22_TIME" "$R22_TZ"
+printf "$column1" $R23 "$R23_DATE" "$R23_TIME" "$R23_TZ"
+printf "$column2" $R24 "$R24_DATE" "$R24_TIME" "$R24_TZ"
+printf "$column1" $R25 "$R25_DATE" "$R25_TIME" "$R25_TZ"
+printf "$column2" $R26 "$R26_DATE" "$R26_TIME" "$R26_TZ"
+printf "$column1" $R2N "$R2N_DATE" "$R2N_TIME" "$R2N_TZ"
+printf "$column2" $R27 "$R27_DATE" "$R27_TIME" "$R27_TZ"
+printf "$column1" $R28 "$R28_DATE" "$R28_TIME" "$R28_TZ"
+printf "$column2" $R29 "$R29_DATE" "$R29_TIME" "$R29_TZ"
+printf "$column1" $R01 "$R01_DATE" "$R01_TIME" "$R01_TZ"
+printf "$column2" $R02 "$R02_DATE" "$R02_TIME" "$R02_TZ"
+printf "$column1" $R03 "$R03_DATE" "$R03_TIME" "$R03_TZ"
+printf "$column2" $R04 "$R04_DATE" "$R04_TIME" "$R04_TZ"
+printf "$column1" $R05 "$R05_DATE" "$R05_TIME" "$R05_TZ"
+printf "$column2" $R06 "$R06_DATE" "$R06_TIME" "$R06_TZ"
+printf "$column1" $R07 "$R07_DATE" "$R07_TIME" "$R07_TZ"
+printf "$column2" $R08 "$R08_DATE" "$R08_TIME" "$R08_TZ"
+printf "$column1" $R09 "$R09_DATE" "$R09_TIME" "$R09_TZ"
+printf "$column2" $R10 "$R10_DATE" "$R10_TIME" "$R10_TZ"
+printf "$column1" $R11 "$R11_DATE" "$R11_TIME" "$R11_TZ"
+printf "$column2" $R12 "$R12_DATE" "$R12_TIME" "$R12_TZ"
+printf "$column1" $R13 "$R13_DATE" "$R13_TIME" "$R13_TZ"
+printf "$column2" $R14 "$R14_DATE" "$R14_TIME" "$R14_TZ"
+printf "$column1" $R15 "$R15_DATE" "$R15_TIME" "$R15_TZ"
+printf "$column2" $R16 "$R16_DATE" "$R16_TIME" "$R16_TZ"
+printf "$column1" $R17 "$R17_DATE" "$R17_TIME" "$R17_TZ"
+printf "$column2" $R18 "$R18_DATE" "$R18_TIME" "$R18_TZ"
 
 echo
 printf "$extracol" "$U" "" "$U_DATE" "$U_TIME"
