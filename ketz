@@ -33,28 +33,29 @@ fp_format() {
 }
 
 fp_trim_sub() {
-    fp_format $(echo "$1 $2" | awk '{printf "%.1f \n", $1-$2}')
+    fp_format $(echo "$1 $2" | awk '{printf "%.1f", $1-$2}')
 }
 
 # "Quick" and dirty bash-floating point math(for mars clock)
+# (all with awk-printf just because i didn't happen to have bc!)
 fp_sub() {
-    printf "$1 $2" | awk '{printf "%.16f \n", $1-$2}'
+    printf "$1 $2" | awk '{printf "%.16f", $1-$2}'
 }
 
 fp_div() {
-    printf "$1 $2" | awk '{printf "%.16f \n", $1/$2}'
+    printf "$1 $2" | awk '{printf "%.16f", $1/$2}'
 }
 
 fp_add() {
-    printf "$1 $2" | awk '{printf "%.16f \n", $1+$2}'
+    printf "$1 $2" | awk '{printf "%.16f", $1+$2}'
 }
 
 fp_mul() {
-    printf "$1 $2" | awk '{printf "%.16f \n", $1*$2}'
+    printf "$1 $2" | awk '{printf "%.16f", $1*$2}'
 }
 
 fp_mod() {
-    printf "$1 $2" | awk '{printf "%.16f \n", $1%$2}'
+    printf "$1 $2" | awk '{printf "%.16f", $1%$2}'
 }
 
 # Mars Clock (implementation of James Tauber's marsclock.com)
