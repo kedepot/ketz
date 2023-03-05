@@ -7,5 +7,4 @@ Listing Time-zones in Shell script.
 Add ketz to ENV in your .bashrc (or similar) and run anywhere!
 
 Note: 
-- Requires 256 color terminal
 - Should be easy enough to change both colors and location picks, should you disagree with the choices!
