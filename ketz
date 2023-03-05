@@ -1,15 +1,32 @@
 #!/bin/sh
 
-# KETZ v1.03 - Kjell Emanuelsson 2023 - Time Zones - shell script exercise
+# KETZ v1.04 - Kjell Emanuelsson 2023 - Time Zones - shell script exercise
 
-# BG1="\e[49m"
-# BG2="\e[30;48;5;0m"
-LOW="\033[38;5;110m"
-BLUE="\033[38;5;111m"
-GREEN="\033[38;5;115m"
-INVGREEN="\033[38;5;66m"
-INVLOW="\033[38;5;67m"
-INVBLUE="\033[38;5;67m"
+color_check=$(tput colors)
+
+if [ $color_check -gt 254 ]; then
+    LOW="\033[38;5;110m"
+    BLUE="\033[38;5;111m"
+    GREEN="\033[38;5;115m"
+    INVGREEN="\033[38;5;66m"
+    INVLOW="\033[38;5;67m"
+    INVBLUE="\033[38;5;67m"
+elif [ $color_check -gt 15 ]; then
+    LOW="\e[37m"
+    BLUE="\e[94m"
+    GREEN="\e[94m"
+    INVGREEN="\e[34m"
+    INVLOW="\e[90m"
+    INVBLUE="\e[34m"
+else
+    LOW="\e[39m"
+    BLUE="\e[39m"
+    GREEN="\e[39m"
+    INVGREEN="\e[39m"
+    INVLOW="\e[39m"
+    INVBLUE="\e[39m"
+fi
+
 date_f="%A %B %-d"
 time_f="%R %Z"
 unixtime=$(date +"%s")
@@ -58,7 +75,8 @@ fp_mod() {
     printf "$1 $2" | awk '{printf "%.16f", $1%$2}'
 }
 
-# Mars Clock (implementation of James Tauber's marsclock.com)
+# Mars Clock (AM2000 implementation of James Tauber's marsclock.com
+# (+also see NASA MSD notes https://www.giss.nasa.gov/tools/mars24/help/notes.html)
 ms=$(fp_div $(date +"%s%N") 1000000)
 jut=$(fp_add $(fp_div $ms 86400000) 2440587.5)
 jls=$(fp_div $(fp_add 37 32.184) 86400)
