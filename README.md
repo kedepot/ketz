@@ -1,5 +1,5 @@
 # ketz
-Listing Time-zones in Shell script.
+List Time Zones, in Shell script.
 
 ![image](https://user-images.githubusercontent.com/95410139/223036214-c4c73c13-c7bd-4dee-9d11-86c2957526d1.png)
 
