@@ -1,7 +1,7 @@
 # ketz
 Listing Time-zones in Shell script.
 
-![2023-03-40_18-43-40](https://user-images.githubusercontent.com/95410139/222791009-a7510fa6-469b-4fc2-99e5-efb349c584f3.png)
+![image](https://user-images.githubusercontent.com/95410139/223036214-c4c73c13-c7bd-4dee-9d11-86c2957526d1.png)
 
 ### Use
 Add ketz to ENV in your .bashrc (or similar) and run anywhere!
